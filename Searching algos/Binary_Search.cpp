@@ -1,42 +1,72 @@
-// C++ program to implement recursive Binary Search 
-#include <bits/stdc++.h> 
-using namespace std; 
-  
-// A recursive binary search function. It returns 
-// location of x in given array arr[l..r] is present, 
-// otherwise -1 
-int binarySearch(int arr[], int l, int r, int x) 
-{ 
-    if (r >= l) { 
-        int mid = l + (r - l) / 2; 
-  
-        // If the element is present at the middle 
-        // itself 
-        if (arr[mid] == x) 
-            return mid; 
-  
-        // If element is smaller than mid, then 
-        // it can only be present in left subarray 
-        if (arr[mid] > x) 
-            return binarySearch(arr, l, mid - 1, x); 
-  
-        // Else the element can only be present 
-        // in right subarray 
-        return binarySearch(arr, mid + 1, r, x); 
-    } 
-  
-    // We reach here when element is not 
-    // present in array 
-    return -1; 
-} 
-  
-int main(void) 
-{ 
-    int arr[] = { 2, 3, 4, 10, 40 }; 
-    int x = 10; 
-    int n = sizeof(arr) / sizeof(arr[0]); 
-    int result = binarySearch(arr, 0, n - 1, x); 
-    (result == -1) ? cout << "Element is not present in array"
-                   : cout << "Element is present at index " << result; 
-    return 0; 
-} 
+// Base Condition
+//***** ARRAY SHOULD BE SORTED *********
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int BinarySearch(int arr[], int key, int size){
+    int left = 0;
+    int right = size-1;
+    /*for large array size, mid can cross the integer range, so we must optimize it
+    (left + right)/2 == (left + ((right-left)/2))
+    
+    */
+    int mid = left + ((right-left)/2);
+
+    while(left<=right){
+        if(arr[mid] == key){
+            return mid;
+        }else{
+            if(arr[mid]<key){
+                left = mid+1;
+            }else{
+                right = mid-1;
+            }
+            mid = left + ((right-left)/2);
+        }
+    }
+    return mid;
+}
+
+bool BinarySearchRecur(int arr[],int s, int e,int key){
+    int mid = s + (e - s)/2;
+    if(s>e){
+        return false;
+    }
+    if(arr[mid] == key){
+        return true;
+    }
+    if(arr[mid]<key){
+        return BinarySearchRecur(arr,mid+1,e,key);
+    }
+    else{
+        return BinarySearchRecur(arr,s,mid-1,key);
+    }
+}
+
+int main(){
+    int arr[] = {1,2,3,4,5,6,7,8,9,1};
+    int size = sizeof(arr)/sizeof(int);
+    if(size == 0){
+        cout<<"Array is empty";
+        return 0;
+    }
+
+    cout<<"Input the element you are searching for ";
+    int key;
+    cin>>key;
+    // int index = BinarySearch(arr,key,size);
+    // if(index!=-1){
+    //     cout<<"Key is present in the array at position "<<index+1<<endl;
+    // }else{
+    //     cout<<"Key is not present in the array"<<endl;
+    // }
+    bool ans = BinarySearchRecur(arr,0,size-1,key);
+    if(ans){
+        cout<<"Key is Present"<<endl;
+    }
+    else{
+        cout<<"Key not Found"<<endl;
+    }
+    return 0;
+}
